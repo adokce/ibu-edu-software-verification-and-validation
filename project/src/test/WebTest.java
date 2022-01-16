@@ -1,6 +1,7 @@
 package test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.jupiter.api.AfterAll;
@@ -80,7 +81,6 @@ class WebTest {
 		Thread.sleep(2000);
 	}
 	
-
 	@Test
 	void testContactModalFormCancel() throws InterruptedException {
 		webDriver.get(baseUrl);
@@ -137,7 +137,6 @@ class WebTest {
 		Thread.sleep(1500);
 	}
 	
-
 	@Test
 	void loginSuccess() throws InterruptedException {
 		webDriver.get(baseUrl);
@@ -163,7 +162,6 @@ class WebTest {
 		Thread.sleep(2000);
 	}
 	
-
 	@Test
 	void loginLogout() throws InterruptedException {
 		webDriver.get(baseUrl);
@@ -202,6 +200,8 @@ class WebTest {
 		webDriver.get(baseUrl);
 		
 		JavascriptExecutor js = (JavascriptExecutor) webDriver;
+
+		Thread.sleep(2000);
 		
 		WebElement s6 = webDriver.findElement(By.xpath("/html/body/div[5]/div/div[2]/div/div[1]/div/div/h4/a"));
 		s6.click();
@@ -283,8 +283,164 @@ class WebTest {
 		orderPurchase.click();
 		Thread.sleep(1000);
 		
+		WebElement message = webDriver.findElement(By.cssSelector("body > div.sweet-alert.showSweetAlert.visible > h2"));
+		
+		assertEquals("Thank you for your purchase!", message.getText());
+		
 		WebElement confirmPurchase = webDriver.findElement(By.xpath("/html/body/div[10]/div[7]/div/button"));
 		confirmPurchase.click();
 		Thread.sleep(1000);
 	}
+
+	@Test
+	void purchaseEmptyCart() throws InterruptedException {
+		webDriver.get(baseUrl);
+		
+		JavascriptExecutor js = (JavascriptExecutor) webDriver;
+		
+		WebElement cart = webDriver.findElement(By.xpath("//*[@id=\"cartur\"]"));
+		cart.click();
+		Thread.sleep(2000);
+		
+		WebElement placeOrder = webDriver.findElement(By.xpath("//*[@id=\"page-wrapper\"]/div/div[2]/button"));
+		placeOrder.click();
+		Thread.sleep(2000);
+		
+		WebElement orderName = webDriver.findElement(By.xpath("//*[@id=\"name\"]"));
+		orderName.sendKeys("Edin Dzeko");
+		Thread.sleep(1000);
+		
+		WebElement orderCountry = webDriver.findElement(By.xpath("//*[@id=\"country\"]"));
+		orderCountry.sendKeys("Italy");
+		Thread.sleep(1000);
+		
+		WebElement orderCity = webDriver.findElement(By.xpath("//*[@id=\"city\"]"));
+		orderCity.sendKeys("Milano");
+		Thread.sleep(1000);
+		
+		WebElement orderCreditCard = webDriver.findElement(By.xpath("//*[@id=\"card\"]"));
+		orderCreditCard.sendKeys("87654321");
+		Thread.sleep(1000);
+		
+		WebElement orderMonth = webDriver.findElement(By.xpath("//*[@id=\"month\"]"));
+		orderMonth.sendKeys("08");
+		Thread.sleep(1000);
+		
+		WebElement orderYear = webDriver.findElement(By.xpath("//*[@id=\"year\"]"));
+		orderYear.sendKeys("2024");
+		Thread.sleep(1000);
+		
+		WebElement orderPurchase = webDriver.findElement(By.xpath("//*[@id=\"orderModal\"]/div/div/div[3]/button[2]"));
+		orderPurchase.click();
+		Thread.sleep(2000);
+		
+		WebElement message = webDriver.findElement(By.cssSelector("body > div.sweet-alert.showSweetAlert.visible > h2"));
+		String messageText = message.getText();
+		
+		WebElement confirmPurchase = webDriver.findElement(By.xpath("/html/body/div[10]/div[7]/div/button"));
+		confirmPurchase.click();
+		Thread.sleep(2000);
+		
+		assertNotEquals("Thank you for your purchase!", messageText);
+	}
+	
+	@Test
+	void purchaseFormValidation() throws InterruptedException {
+		webDriver.get(baseUrl);
+		
+		JavascriptExecutor js = (JavascriptExecutor) webDriver;
+
+		Thread.sleep(2000);
+		
+		WebElement s6 = webDriver.findElement(By.xpath("/html/body/div[5]/div/div[2]/div/div[1]/div/div/h4/a"));
+		s6.click();
+		Thread.sleep(2000);
+		
+		WebElement cart1 = webDriver.findElement(By.xpath("//*[@id=\"tbodyid\"]/div[2]/div/a"));
+		cart1.click();
+		Thread.sleep(2000);
+		
+		Alert alertCart = webDriver.switchTo().alert();
+		alertCart.accept();
+		Thread.sleep(1500);
+		
+		WebElement goHome = webDriver.findElement(By.xpath("//*[@id=\"navbarExample\"]/ul/li[1]/a"));
+		goHome.click();
+		Thread.sleep(2000);
+		
+		WebElement next = webDriver.findElement(By.xpath("//*[@id=\"next2\"]"));
+		js.executeScript("arguments[0].scrollIntoView();", next);
+		Thread.sleep(2000);
+		next.click();
+		Thread.sleep(2000);
+		
+		js.executeScript("window.scrollBy(0,350)", "");
+		Thread.sleep(1000);
+		WebElement dell = webDriver.findElement(By.xpath("/html/body/div[5]/div/div[2]/div/div[4]/div/div/h4/a"));
+		dell.click();
+		Thread.sleep(2000);
+		
+		WebElement cart2 = webDriver.findElement(By.xpath("//*[@id=\"tbodyid\"]/div[2]/div/a"));
+		cart2.click();
+		Thread.sleep(2000);
+		
+		Alert alertDell = webDriver.switchTo().alert();
+		alertDell.accept();
+		Thread.sleep(1500);
+		
+		WebElement home2 = webDriver.findElement(By.xpath("//*[@id=\"navbarExample\"]/ul/li[1]/a"));
+		home2.click();
+		Thread.sleep(2000);
+		
+		WebElement cart = webDriver.findElement(By.xpath("//*[@id=\"cartur\"]"));
+		cart.click();
+		Thread.sleep(2000);
+		
+		WebElement deleteDell = webDriver.findElement(By.xpath("//*[@id=\"tbodyid\"]/tr[2]/td[4]/a"));
+		deleteDell.click();
+		Thread.sleep(2000);
+		
+		WebElement placeOrder = webDriver.findElement(By.xpath("//*[@id=\"page-wrapper\"]/div/div[2]/button"));
+		placeOrder.click();
+		Thread.sleep(2000);
+		
+		WebElement orderName = webDriver.findElement(By.xpath("//*[@id=\"name\"]"));
+		orderName.sendKeys("Edin Dzeko");
+		Thread.sleep(1000);
+		
+		WebElement orderCountry = webDriver.findElement(By.xpath("//*[@id=\"country\"]"));
+		orderCountry.sendKeys("Italy");
+		Thread.sleep(1000);
+		
+		WebElement orderCity = webDriver.findElement(By.xpath("//*[@id=\"city\"]"));
+		orderCity.sendKeys("Milano");
+		Thread.sleep(1000);
+		
+		WebElement orderCreditCard = webDriver.findElement(By.xpath("//*[@id=\"card\"]"));
+		orderCreditCard.sendKeys("STA_CE_MI_KARTICA_LOL");
+		Thread.sleep(1000);
+		
+		WebElement orderMonth = webDriver.findElement(By.xpath("//*[@id=\"month\"]"));
+		orderMonth.sendKeys("DRUGI");
+		Thread.sleep(1000);
+		
+		WebElement orderYear = webDriver.findElement(By.xpath("//*[@id=\"year\"]"));
+		orderYear.sendKeys("DVIJE_DVAJES_DRUGA");
+		Thread.sleep(1000);
+		
+		WebElement orderPurchase = webDriver.findElement(By.xpath("//*[@id=\"orderModal\"]/div/div/div[3]/button[2]"));
+		orderPurchase.click();
+		Thread.sleep(1000);
+
+		WebElement message = webDriver.findElement(By.cssSelector("body > div.sweet-alert.showSweetAlert.visible > h2"));
+		String messageText = message.getText();
+		
+		
+		WebElement confirmPurchase = webDriver.findElement(By.xpath("/html/body/div[10]/div[7]/div/button"));
+		confirmPurchase.click();
+		Thread.sleep(1000);
+		
+		assertNotEquals("Thank you for your purchase!", messageText);
+	}
+
 }
